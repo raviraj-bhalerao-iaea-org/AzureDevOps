@@ -1,0 +1,78 @@
+Some linux commands
+Change permissions, performance, user groups
+
+sudo -i
+
+adduser user01 /user01@pwd
+adduser user02 /user02@pwd
+passwd user01
+
+sudo su - username
+difference is sudo su (tempory login without user's environment setup) and sudo su - (login user's environment setup)
+
+sudo apt update
+sudo apt install tree -y
+
+alias mycmd="command" 
+for permanent alias add it to .bashrc file (user's home dir)
+
+ls -lh (size in readble forme)
+
+add x to the directory's permissions for others, to allow users to access files in the directory
+
+chmod
+  Absolute : chmod 426 [r=4, w=2, x=1]
+  Symbolid : chmod (u)(g)(o)(+/-)(r)(w)(x)
+  chmod u+r, g+w, o+x
+  chmod -R : recursive 
+
+umask decides default permissions
+  777 - umask = resuting default permissions
+changing umask is for the session, use .bashrc to make it permanent
+
+groupadd groupName
+/etc/passwd - all users
+/etc/group - all groups
+change user group 
+  usermod -g groupname username
+  new group for user reflects only in new session, old session still shows it same
+
+
+touch userFile{1..5} - create files userFile1 to userFile5
+
+performance display
+  free -m
+  top : all performance like taskmanager. dynamic 
+  ps -ef : process information
+  ps -ef|grep sshd : all logged in processs
+
+kill -9 pid:forcefull kill
+kill -15 pid:gracefull kill
+kill -l:all options for kill
+
+tail -3  /etc/group : show last 3 lines of the file
+ps -ef|tail -3
+head for first
+
+
+useradd and adduser differenc : useradd used in scripting, to add users with more information
+
+visudo - edit sudoer file 
+EDITOR=vi visudo : edit in vi editor
+add user for specific sudo command
+user02 ALL=(ALL) NOPASSWD: /usr/sbin/useradd :- will not ask user for password otherwise sudo will ask for logged in user's pwd to verify the user
+which useradd : location of useradd command
+
+--add users to a group
+gpasswd -a username groupname
+cat -n /etc/gshadow
+This new group membership and related permissions are effective only in new session.
+
+
+df -h : disk information
+lsblk -f and df -h help identify which physical disk has which partitions with mountpoints and mountedon columns from respective command outputs
+
+
+grep = global regular expression
+
+
