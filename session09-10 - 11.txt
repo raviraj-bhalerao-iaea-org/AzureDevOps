@@ -1,0 +1,103 @@
+Session 9
+Network and Networking and IP address ranges
+
+Network
+    Devices connected to share resources
+
+Networking
+    Manage network
+
+IANA
+    Internet Assighed Numbers Authority
+
+
+
+Class A : 0.0.0.0 - 127.255.255.255 : 128
+
+Class B : 128.0.0.0 - 191.255.255.255 : 64
+
+Class C : 192.0.0.0 - 223.255.255.255 : 32
+
+Class D : 224.0.0.0 - 239.255.255.255 : 16
+
+Class E : 240.0.0.0 - 255.255.255.255 : 16
+
+
+
+Session 10
+
+
+NAT = Network address translation
+
+Class A : 0.0.0.0 - 127.255.255.255 : 128
+        Private ip range - 10.0.0.0 - 10.255.255.255
+        Subnet mask - 255.0.0.0
+        Cidr - /8
+
+Class B : 128.0.0.0 - 191.255.255.255 : 64
+        Private ip range - 172.16.0.0 - 172.31.255.255
+        Subnet mask - 255.255.0.0
+        Cidr - /16
+
+Class C : 192.0.0.0 - 223.255.255.255 : 32
+        Private ip range - 192.168.0.0 - 192.168.255.255
+        Subnet mask - 255.255.255.0
+        Cidr - /24
+        BUT in Azure
+        Subnet mask - 255.255.0.0
+        Cidr - /16
+
+
+Class D : 224.0.0.0 - 239.255.255.255 : 16
+
+Class E : 240.0.0.0 - 255.255.255.255 : 16
+
+
+CIDR = # of bits to use for network portion of id address range
+
+Host bits are used for internal devices.
+CIDR of /8 means 2 raise to (32-8) ip addresses can be used for machines with subnet mask of 11111111.00000000.00000000.0000000 = 255.0.0.0
+CIDR of /12 means 2 raise to (32-12) ip addresses can be used for machines with subnet mask of 11111111.11110000.00000000.0000000 = 255.240.0.0
+CIDR of /26 means 2 raise to (32-26) ip addresses can be used for machines with subnet mask of 11111111.11111111.11111111.1100000 = 255.255.255.192
+CIDR of /19 means 2 raise to (32-19) ip addresses can be used for machines with subnet mask of 11111111.11111111.11100000.0000000 = 255.255.224.0
+CIDR of /18 means 2 raise to (32-18) ip addresses can be used for machines with subnet mask of 11111111.11111111.11000000.0000000 = 255.255.192.0
+
+Session 11
+
+Total computers - 2000 , class A
+CIDR of /21 for class - Total machines accomodated = 2048
+    Privat ip range only in range of 10.0.0.0 - 10.255.255.255
+    21 bits reserved for network portion
+        11111111.11111111.11111000.00000000 = 255.255.248.0 is subnet mask
+        so range of ip addresses can be anything starging 10.0-255.0-248.0 e.g. 10.255.248.0 - 10.255.255.255 or 10.0.5.0 - 10.0.12.255
+
+
+Total computers - 50 , class A
+CIDR of /26 for class - Total machines accomodated = 64
+    Privat ip range only in range of 10.0.0.0 - 10.255.255.255
+    21 bits reserved for network portion
+        11111111.11111111.11111111.11000000 = 255.255.255.192 is subnet mask
+        so range of ip addresses can be anything starging 10.0-255.0-255.0-192 e.g. 10.255.255.192 - 10.255.255.255 or 10.0.5.0 - 10.0.5.63
+
+Total computers - 500 , class C, 4 parts
+Class C : Private Ip range in range of 192.168.0.0 - 192.168.255.255
+CIDR of /23 total 
+        11111111.11111111.11111110.00000000 = 192.168.254.0 - 192.168.254.127 | 192.168.254.128 - 192.168.254.255| 192.168.255.0 - 192.168.255.127| 192.168.255.128 - 192.168.255.255
+so cidr of /25 for each part
+
+        192.168.254.0/24
+        192.168.254.128/25
+        192.168.255.0/25
+        192.168.255.128/25
+
+Total computers - 500 , class C, 3 parts
+Class C : Private Ip range in range of 192.168.0.0 - 192.168.255.255
+CIDR of /23 total 
+so cidr of /24, /25, /25 for 3 parts
+    Part 1 : /24
+        11111111.11111111.11111111.00000000 = 192.168.255.0 - 192.168.255.255
+    Part 2 : /25
+        11111111.11111111.11111111.10000000 = 192.168.254.0 - 192.168.254.127
+    Part 2 : /25
+        11111111.11111111.11111111.10000000 = 192.168.254.128 - 192.168.254.255
+

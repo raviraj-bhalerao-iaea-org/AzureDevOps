@@ -1,76 +1,61 @@
-sudo -i
+Install web server, configure firewall
 
-adduser user01 /user01@pwd
-adduser user02 /user02@pwd
-passwd user01
+Add Apache to Ubuntu
+    sudo apt install apache2
+check firewall
+    ufw allow 'Apache'
+    ufw status
+    ufw
+Check apache status
+    systemctl status apache2
 
-sudo su - username
-difference is sudo su (tempory login without user's environment setup) and sudo su - (login user's environment setup)
+Check local ip address; in this case not much useful as its a vm with 
+    ip a
 
-sudo apt update
-sudo apt install tree -y
+Where is apache2 located?
+    which httpd
+    which apache2
 
-alias mycmd="command" 
-for permanent alias add it to .bashrc file (user's home dir)
+Apache version
+    apache2 -v
 
-ls -lh (size in readble forme)
+Apache config files
+    ls -l /etc
+    ls -l /etc/apache2
 
-add x to the directory's permissions for others, to allow users to access files in the directory
+Check status of Apache and control the process
+    systemctl status apache2
+    netstat -tulnp | grep apache2
+    cat /etc/apache2/ports.conf -n
 
-chmod
-  Absolute : chmod 426 [r=4, w=2, x=1]
-  Symbolid : chmod (u)(g)(o)(+/-)(r)(w)(x)
-  chmod u+r, g+w, o+x
-  chmod -R : recursive 
+Check if default website is working
+    curl http://localhost
 
-umask decides default permissions
-changing umask is for the session, use .bashrc to make it permanent
+Chech firewall status
+    ufw status
 
-groupadd groupName
-/etc/passwd - all users
-/etc/group - all groups
-change user group 
-  usermod -g groupname username
-  new group for user reflects only in new session, old session still shows it same
+Configure firewall to allow shell
+    ufw allow ssh
 
+Check users rules configured while firewall is inactive    
+    ufw status verbose
+    ufw show
+    ufw show raw
+    clear
+    cat -n /etc/ufw/user.rules
 
-touch userFile{1..5} - create files userFile1 to userFile5
+Enable firewall
+    ufw enable
+    ufw status
 
-performance display
-free -m
-top : all performance like taskmanager. dynamic 
+Check details of configuration for Apache in firewall
+    ufw app info "Apache"
 
-ps -ef : process information
+check ports open
+    netstat -nulpn/netstat -tulpn
 
-ps -ef|grep sshd : all logged in processs
-
-kill -9 pid:forcefull kill
-kill -15 pid:gracefull kill
-kill -l:all options for kill
-
-tail -3  /etc/group : show last 3 lines of the file
-ps -ef|tail -3
-head for first
-
-
-useradd and adduser differenc : useradd used in scripting, to add users with more information
-
-visudo - edit sudoer file 
-EDITOR=vi visudo : edit in vi editor
-add user for specific sudo command
-user02 ALL=(ALL) NOPASSWD: /usr/sbin/useradd :- will not ask user for password otherwise sudo will ask for logged in user's pwd to verify the user
-which useradd : location of useradd command
-
---add users to a group
-gpasswd -a username groupname
-cat -n /etc/gshadow
-This new group membership and related permissions are effective only in new session.
-
-
-df -h : disk information
-lsblk -f and df -h help identify which physical disk has which partitions with mountpoints and mountedon columns from respective command outputs
-
-
-grep = global regular expression
-
-
+check all services available
+    systemctl --type=service --all ; try with parameter LOAD=loaded/ACTIVE=active/SUB=running
+    systemctl start apache2
+    systemctl enable apache2
+    

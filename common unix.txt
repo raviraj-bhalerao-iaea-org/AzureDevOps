@@ -1,0 +1,17 @@
+In page output navigate using - 
+    Key	                Action
+    SPACE	        Next page
+    b	            Back one page
+    ↑ / ↓	        Scroll line up / down
+    PgUp / PgDn	    Page up / down (same as b/SPACE)
+    q	            Quit / exit less
+    /pattern	    Search forward for a pattern
+    n / N	        Next / previous match
+    g	            Go to beginning
+    G	            Go to end
+
+/etc/profile file* contains syste wide shell initialisation scripts. 
+
+shebang / hashbang : Tells the kernal to use bash (interpreter9999bbbbbq) to run the script and throw error if bash is not present.
+    !#/bin/bash
+if same file is run as sh ./shellfile.sh, it will ignore the shebang
