@@ -101,3 +101,28 @@ so cidr of /24, /25, /25 for 3 parts
     Part 2 : /25
         11111111.11111111.11111111.10000000 = 192.168.254.128 - 192.168.254.255
 
+
+
+Session 12
+
+
+CIDR dirctly and precisely translates to subnet mask. e.g. /26 = 255.255.255.192, /24 255.255.255.0 etc. CIDR to subnet mask tables are readily available.
+
+Each subnet must have a network address and its used for routing.
+    First ip address in the range of subnet ip addresses is reserved as network address. This ip address with cidr is used outside of subnet for routing. e.g. 10.2.3.0/24 represents all ips from 10.2.3.0-10.2.3.255 and hence traffic to any ip in this range will be routed to this subnet.
+
+First 4 and last ip in any subnet is reserved in azure and aws.
+    1. Network address
+        Each subnet must have a network address and its used for routing.
+            First ip address in the range of subnet ip addresses is reserved as network address. This ip address with cidr is used outside of subnet for routing. e.g. 10.2.3.0/24 represents all ips from 10.2.3.0-10.2.3.255 and hence traffic to any ip in this range will be routed to this subnet.    
+    2. Default gateway
+        Any machine in the subnet will send outbound packets to this ip. Azure's internal stack handles this routing.
+    3. Reserved for future use.
+    4. Reserved for future use.
+    Last. Used for broadcast
+        Azure blocks all broadcasts, for security and performance purpose. Azure uses multicast/unicast and other cloud native mechanisms.
+
+
+When Subnet mask is 'and'ed with ip address, it results the network address (first ip of the subnet) and with CIDR last ip can be calculated.
+
+https://www.davidc.net/

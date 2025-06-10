@@ -1,0 +1,116 @@
+Session 4 - VM Creation
+
+        BastionHost is jump service provided by Azure. Jump server provides pip and using nsg it controls access to certain ips to connect. Once in Jump server, one can Remote Connect to other VMs in private n/w.
+
+        With VM following items are created
+            VM
+            Disk
+            Nic (with Private Ip)
+            NSG : Optional but needed for connectivity; basic give 3 inbound/3 outbound rules
+            PiP (if selected_)
+
+
+Session 05 - VNet Peering
+
+        Why VNet Peering instead of PiP
+            Reduce latency
+            Avoid En/Decryption
+            Better security
+
+        VNet Peering
+            Only between MS Azure cloud
+            Same region - local peering
+            Different region - global peering
+            It does not depend whether these regions are in same/different Account/Subscription
+            IPs of Source and Destination VNets must NOT overlap
+            If LB is used in any of the VNets and if both VNets belong to different regions, Standard sku LB must be used as Basic sku LB does not understand the traffic is coming from peered region and hence should be allowed.
+
+            When VNet peering is created using Resource Manager, its automatically placed in resource group container and is easier to manage.
+
+            Subnet peering 
+                A UDR can be added for a specific subnet, and all traffic to that subnet (matching the route destination) will be routed through the designated virtual appliance. Traffic flows freely between the rest of the subnets in the same or peered VNets, unless subnet peering is configured to limit which subnets can communicate.
+                There can be only one peering link between any 2 VNets. If one wants to add/remove subnets to the subnet peering link, same link must be updated.
+                To change VNet peering to Subnet peering or vice-a-versa, the link must be re-created.
+
+            When VNet peered across different accounts, there will be a request to destination account to approve the VNet peering request, which when approved, VNet peering will be established.
+
+            Costs are incurred based on amount data transferred (at both source and destination end)
+
+
+Session 06 - Global peering
+
+
+            Example of using VPN Gateway : 
+
+                On-Prem Network (192.168.0.0/16)
+                │
+                │  🔒 IPsec VPN Tunnel (over public internet)
+                ▼
+            [VPN Gateway] (in Gateway Subnet)
+                │
+                ▼
+            Hub VNet (10.0.0.0/16) ─────► Spoke VNet A (10.1.0.0/16)
+                    │                        ▲
+                    └───────────────► Spoke VNet B (10.2.0.0/16)
+
+            🔄 Flow of Traffic
+            🏢 User in On-Prem tries to access a VM in Spoke VNet A.
+
+            🔐 Traffic is encrypted and sent over the VPN Tunnel to Azure's VPN Gateway in Hub VNet.
+
+            📤 Hub VNet receives the traffic and routes it to the peered Spoke VNet A.
+
+            📩 VM in Spoke A responds, and traffic flows back through the same path.
+
+            | Component     | Location     | Role                                 |
+            | ------------- | ------------ | ------------------------------------ |
+            | VPN Gateway   | Hub VNet     | Establishes secure tunnel to on-prem |
+            | GatewaySubnet | Hub VNet     | Special subnet to host VPN Gateway   |
+            | On-Prem VPN   | On-prem      | Device that connects to Azure        |
+            | Route Table   | Hub & Spokes | Controls traffic direction           |
+            | VM/Services   | Spoke VNets  | Actual workloads users access        |
+
+
+            Transitive routing is possible with the use of NVA (Network virtual appliance)
+
+                [ Spoke1 VNet ]
+                    10.1.0.0/16
+                        |
+                        | (VNet Peering)
+                        ↓
+                [ Hub VNet (with NVA) ]
+                    10.0.0.0/16
+                    ┌──────────────────────┐
+                    │ Subnet: AzureFirewall/NVA │
+                    │ IP: 10.0.1.4              │
+                    └──────────────────────┘
+                        ↑
+                        | (VNet Peering)
+                        |
+                [ Spoke2 VNet ]
+                    10.2.0.0/16
+            🔧 Required Setup:
+            ✅ 1. Peering Setup:
+            Spoke1 ↔ Hub (with "Allow forwarded traffic" ✔️)
+
+            Spoke2 ↔ Hub (with "Allow forwarded traffic" ✔️)
+
+            ✅ 2. User-Defined Routes (UDRs):
+            In Spoke1, route 10.2.0.0/16 → next hop: 10.0.1.4 (IP of NVA)
+
+            In Spoke2, route 10.1.0.0/16 → next hop: 10.0.1.4
+
+            ✅ 3. NVA (e.g., Azure Firewall or custom router):
+            Must have IP forwarding enabled.
+
+            Must be allowed to pass traffic from Spoke1 to Spoke2 and vice versa.
+
+            ✅ 4. NSG Rules:
+            Allow traffic from/to the required IP ranges in Spoke1 and Spoke2.
+
+
+            Its possible to change address space of the VNet.
+                Add new address space
+                Add relevant subnets
+                Assign VMs' Nics to new subnets (VM Restart needed)
+                Sync the peering links

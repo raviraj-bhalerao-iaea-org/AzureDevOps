@@ -1,0 +1,36 @@
+Gather all links from Aradhy
+
+
+Session 1
+
+Azure region contains max 3 availability zones
+    Each AVz contains data center
+
+Region -> AVz -> DC -> Rack -> server
+
+Azs and regions are connected by backbone cabling
+
+Edge Networks (PoP - point of presence)
+    Used to reduce latency
+
+
+
+Session 2
+
+Tenant - Dedicated instance of Azure AD for an ogranisation.
+Subscription - Container containing all resources like vms, etc being tracked for billing
+Account - User identity
+Service - Functionality offered like Virtual Machine
+Resource - Output of the service like specific instance of vm
+Resource Groups - Used to group resources for managing resources, permission management, billing overview.
+    Locations of RG can be different than those of resources
+    Max 980 RGs in a sub
+
+
+Session 3 VNet
+
+VNet : max 50 in a sub
+    Region : Regional service
+    Private ip
+    Subnets : max 1000 in a sub
+    VMs in same vnet but different sub nets can talk to each other in Azure by default (using private ip), but not in AWS, GCP
