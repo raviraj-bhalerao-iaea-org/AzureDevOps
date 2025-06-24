@@ -69,8 +69,12 @@
  - In parlance, VPN Gateway = Virtual Network Gateway of VPN type; other one being Express Route which uses "Private Circuit Connection" which is dedicated wired connection, not internet; On-Prem -> DC -> VNet
  - One needs Network Contributor rights in each subscriptions while setting up VPN Gateway between two VNets.
     - This is different in Express Router, in that, the owner of the Route shares a Authorization Key.
-
+ - UseLocalAzureIpAddress to be used for ExpressRoute only otherwise VPN connection does not connect
+ 
 ### Try
-- Establish VNet peering with encryption
-- Try VNG with region different from VNet
-- Test transitivity of VPN Gateway (BGP must be enabled)
+Done - Establish VNet peering with encryption
+Done - Try VNG with region different from VNet : Not possible as GatewaySubnet is not picked up
+Done - Test transitivity of VPN Gateway (BGP must be enabled)
+
+Session 11 - 13
+VNG connection between AWS and Azure

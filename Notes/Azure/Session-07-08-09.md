@@ -66,7 +66,7 @@ Rules are evaluated in ascending order of priority; the smallest priority dictat
 
 #### Done 3. Advanced NSG at VM creation
 - Create NSG (Allow 22)  
-- Create VM with Advanced (use already created NSG)  
+- Create VM with Advanced (use already created NSG, or create a new one)  
 - Test connection  
 
 #### Done 4. Conflicting NSGs
