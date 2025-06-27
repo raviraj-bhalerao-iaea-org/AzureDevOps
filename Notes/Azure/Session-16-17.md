@@ -128,6 +128,19 @@ Workloads → UDR → Azure Firewall → UDR → VNG → On-Premises
 - Attached to Subnet  (1 subnet :: 1 UDR)
 - Each subnet has by default system routes
 - Acts on layer 3 of OSI (no ports used)
+- More specific rules take precedence over generic rules and its done by the UDR service automatically
+  - if a packet is being sent to 45.25.65.32 and if you have following 3 rules
+    - 45.25.65.32/25 -> 1.2.3.4, 45.25.65.32/32 -> 5.6.7.8, 0.0.0.0/0 -> 10.5.0.4 then UDR will send the packet to 5.6.7.8, 45.25.65.32/32 being more specific rule for 45.25.65.32 destination
+- Difference between UDR and DNAT/SNAT
+```PlainText
+| Feature   | UDR                        | DNAT                           | SNAT                          |
+| --------- | -------------------------- | ------------------------------ | ----------------------------- |
+| Works on  | Routing decision/ Layer 3  | Destination IP/Port / Layer 3  | Source IP                     |
+| Modifies? | ❌ No (just forwards)      | ✅ Yes                        | ✅ Yes                        |
+| Direction | Outbound                   | Inbound                        | Outbound                      |
+| Use Case  | Force routing to appliance | Expose internal service        | Egress via firewall/public IP |
+
+```
   
 
 ### Try 
@@ -145,7 +158,7 @@ Done - Try service Tags and FQDN tags: These tags are predefined e.g. FQDN Tags 
 
 Done - Assign PiP prefix to firewall PiP : Not supported
 
-Done - De-allocate/allocate firewall : P Script
+TODO - De-allocate/allocate firewall and check IP configuration : P Script
 
 Done - Allocate the VM a PiP, configure DNat for the VM's private ip, connect to VM using its's PiP and firewall's pip/port : If UDR is configured connection to VM with PiP fails. The communication to VM with PiP works but outbound comm is routed to firewall and it fails.
 ```PlainText
